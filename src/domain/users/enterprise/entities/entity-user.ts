@@ -1,5 +1,7 @@
 import { Entity } from "@/core/entities/entity.js"
 import { EntityUUID } from "@/core/types/random-uuid.js"
+import { hash } from "bcryptjs"
+import { randomUUID } from "crypto" 
 
 export interface UserProps{
     id?      : EntityUUID
@@ -49,6 +51,19 @@ export class User extends Entity<UserProps>{
         cpf = cpf.replaceAll("-", "")
 
         return cpf
+    }
+
+    static isPasswordWithValidNumberOfCharacters(password: string) {
+        return password.length >= 6
+    }
+
+    static isNameWithvalidNumberOfCharacter(name: string) {
+        const nameWithoutSpace = name.split(" ").join('')
+        return nameWithoutSpace.length >= 6
+    }
+
+    static async buildPasswordHashed(password: string) {
+        return await hash(password, 8)
     }
 
     isAdmin() {

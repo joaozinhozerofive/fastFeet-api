@@ -1,0 +1,1 @@
+export type UserPropsOptional = "cpf" | "name" | "password" | "role"
