@@ -20,18 +20,13 @@ export class InMemoryUsersRepository implements UsersRepository {
         return this.users.find(user => user.id === id) || null
     }
 
-    async update(data: Optional<UserProps, UserPropsOptional>, id: UniqueEntityUUID): Promise<User> {
-        const user = await this.findById(id)
+    async update(data: User): Promise<User> {
+        const index = this.users.findIndex(user => user.id === data.id)
+        
+        if(index < 0) return this.users[0]
+        this.users[index] = data
 
-        if(!user) return this.users[0]
-
-        for(const key in data) {
-            if((data as any)[key]) {
-                (user as any).props[key] = (data as any)[key]
-            }
-        }
-
-        return await this.findById(id) || this.users[0]
+        return data
     }
 
     async findManyNearBy(params: Optional<UserProps, UserPropsOptional>): Promise<User[] | null> {
@@ -49,8 +44,8 @@ export class InMemoryUsersRepository implements UsersRepository {
         return user
     }
 
-    async deleteById(id: UniqueEntityUUID): Promise<void> {
-        const user = this.users.find(user => user.id === id)
+    async delete(user: User): Promise<void> {
+        const userFromId = this.users.find(data => data.id === user.id)
         
         if(user) {
             this.users = this.users.filter(newUser => newUser.id != user.id)

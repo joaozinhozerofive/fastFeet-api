@@ -12,10 +12,10 @@ export class InMemoryRecipientRepository implements RecipientRepository {
         return recipient
     }
 
-    async deleteById(id: UniqueEntityUUID): Promise<void> {
-        const recipient = this.recipients.find(recipient => recipient.id === id)
+    async delete(recipient: Recipient): Promise<void> {
+        const recipientFromId = this.recipients.find(data => data.id === recipient.id)
         
-        if(recipient) {
+        if(recipientFromId) {
             this.recipients = this.recipients.filter(newRecipient => newRecipient.id != recipient.id)
         }
     }
@@ -43,17 +43,13 @@ export class InMemoryRecipientRepository implements RecipientRepository {
         return recipient
     }
 
-    async update(data: Optional<RecipientProps, RecipientPropsOptional>, id: UniqueEntityUUID): Promise<Recipient> {
-        const recipient = await this.findById(id)
+    async update(data: Recipient): Promise<Recipient> {
+        const index = this.recipients.findIndex(recipient => recipient.id === data.id)
 
-        if(!recipient) return this.recipients[0]
+        if(index < 0) return this.recipients[0]
+        
+        this.recipients[index] = data 
 
-        for(const key in data) {
-            if((data as any)[key]) {
-                (recipient as any).props[key] = (data as any)[key]
-            }
-        }
-
-        return await this.findById(id) || this.recipients[0]
+        return this.recipients[index]
     }
 } 

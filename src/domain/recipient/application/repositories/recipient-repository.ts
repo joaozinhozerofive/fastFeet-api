@@ -8,6 +8,6 @@ export interface RecipientRepository{
     findById(id: UniqueEntityUUID) : Promise<Recipient | null>
     findByCpf(cpf: string) : Promise<Recipient | null>
     findManyNearBy(params: Optional<RecipientProps, RecipientPropsOptional>): Promise<Recipient[] | null>
-    update(data: Optional<RecipientProps, RecipientPropsOptional>, id: UniqueEntityUUID) : Promise<Recipient>
-    deleteById(id: UniqueEntityUUID) : Promise<void>
+    update(data: Recipient) : Promise<Recipient>
+    delete(data: Recipient) : Promise<void>
 }

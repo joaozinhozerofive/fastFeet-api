@@ -1,4 +1,5 @@
 import { Entity } from "@/core/entities/entity.js";
+import { PersonEntity } from "@/core/entities/person-entity.js";
 import { UniqueEntityUUID } from "@/core/types/random-uuid.js";
 
 export interface RecipientProps {
@@ -10,7 +11,7 @@ export interface RecipientProps {
 
 export type RecipientPropsOptional = 'id' | 'name' | 'cpf' | 'phone_number'
 
-export class Recipient extends Entity<RecipientProps> {
+export class Recipient extends PersonEntity<RecipientProps> {
     constructor(props: RecipientProps) {
         super(Recipient.buildProps(props))
     }

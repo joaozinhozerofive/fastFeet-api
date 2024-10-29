@@ -200,7 +200,7 @@ describe('Update User',  () => {
         const response = await sut.execute({
             cpf         : User.buildCpf("159.159.159-10"), 
             name        : "Usuário Teste", 
-            password    : await User.buildPasswordHashed("1234567"), 
+            password    : "1234567", 
             old_password: "123456", 
             role        : "DELIVERY-PEOPLE"
         }, uuid)

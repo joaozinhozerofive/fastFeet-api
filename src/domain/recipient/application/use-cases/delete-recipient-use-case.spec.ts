@@ -25,7 +25,9 @@ describe('Delete a Recipient', async () =>{
 
         inMemoryRecipientsRepository.recipients.push(recipient)
 
-        const response = await sut.execute(uuid)
+        const response = await sut.execute({
+            id: uuid
+        })
 
         expect(response.isRight()).toBe(true)
         expect(response.value).toBe(null)
@@ -33,7 +35,9 @@ describe('Delete a Recipient', async () =>{
     })
 
     it(`shouldn't be able to delete a recipient if it doesn't exist`, async () => {
-        const response = await sut.execute(randomUUID())
+        const response = await sut.execute({
+            id: randomUUID()
+        })
 
         expect(response.isLeft()).toBe(true)
         expect(response.value).instanceOf(RecipientNotFoundError)

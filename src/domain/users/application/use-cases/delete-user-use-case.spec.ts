@@ -8,7 +8,7 @@ import { DeleteUserUseCase } from "./delete-user-use-case.js";
 let inMemoryUsersRepository: InMemoryUsersRepository
 let sut: DeleteUserUseCase
 
-describe('Find an User by id', async() => {
+describe('Delete an User', async() => {
     beforeEach(() => {
         inMemoryUsersRepository = new InMemoryUsersRepository()
         sut = new DeleteUserUseCase(inMemoryUsersRepository)
@@ -35,9 +35,8 @@ describe('Find an User by id', async() => {
     })
 
     it(`shouldn't  to delete an user by id if user not exists`, async () => {
-        const uuid = randomUUID()
         const response = await sut.execute({
-            id: uuid
+            id: randomUUID()
         })
 
         expect(response.isLeft()).toBe(true)

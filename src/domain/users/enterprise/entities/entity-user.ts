@@ -1,4 +1,4 @@
-import { Entity } from "@/core/entities/entity.js"
+import { PersonEntity } from "@/core/entities/person-entity.js"
 import { UniqueEntityUUID } from "@/core/types/random-uuid.js"
 import { hash } from "bcryptjs"
 import { randomUUID } from "crypto" 
@@ -11,7 +11,7 @@ export interface UserProps{
     role     : 'ADMIN' | 'DELIVERY-PEOPLE'
 }
 
-export class User extends Entity<UserProps>{
+export class User extends PersonEntity<UserProps>{
     constructor(props : UserProps) {
         super(User.buildProps(props))
     }

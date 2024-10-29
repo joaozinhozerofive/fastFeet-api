@@ -4,7 +4,7 @@ import { UsersRepository } from "../repositories/users-repository.js";
 import { UniqueEntityUUID } from "@/core/types/random-uuid.js";
 import { UserNotFoundError } from "../../../../core/errors/user-not-found-error.js";
 import { Either, left, right } from "@/core/either.js";
-import { compare } from "bcryptjs";
+import { compare, hash } from "bcryptjs";
 import { InvalidPasswordError } from "../../../../core/errors/invalid-password-error.js";
 import { CpfAlreadyExistsError } from "../../../../core/errors/cpf-already-exists.js";
 import { PasswordWithInvalidNumberOfCharactersError } from "../../../../core/errors/password-with-invalid-number-of-characters-error.js";
@@ -31,7 +31,7 @@ export class UpdateUserUseCase {
         private usersRepository : UsersRepository
     ) {}
 
-    async execute(data : Optional<UpdateUserUseCaseDataRequest, UserPropsOptional>, id: UniqueEntityUUID) : Promise<UpdateUserUseCaseResponse> {
+    async execute(data: Optional<UpdateUserUseCaseDataRequest, UserPropsOptional>, id: UniqueEntityUUID) : Promise<UpdateUserUseCaseResponse> {
         const user = await this.usersRepository.findById(id)
 
         if(!user) return left(new UserNotFoundError())
@@ -53,7 +53,14 @@ export class UpdateUserUseCase {
             if(User.isInvalidCpf(data.cpf)) return left(new InvalidCpfError())
         }
 
-        const userUpdated = await this.usersRepository.update(data, id)
+        const userUpdated = await this.usersRepository.update(
+            User.create({
+            id,
+            cpf: data.cpf || user.cpf, 
+            name: data.name || user.name, 
+            password: data.password ? await User.buildPasswordHashed(data.password) : user.password, 
+            role: data.role || user.role
+        }))
 
         return right({
             user : userUpdated

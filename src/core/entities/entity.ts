@@ -10,21 +10,4 @@ export abstract class Entity<Props> {
     get props() : Props {
         return this._props
     }
-
-    static buildCpf(cpf: string) {
-        cpf = cpf.replaceAll(".", "")
-        cpf = cpf.replaceAll("-", "")
-
-        return cpf
-    }
-
-    static isNameWithvalidNumberOfCharacter(name: string) {
-        const nameWithoutSpace = name.split(" ").join('')
-        return nameWithoutSpace.length >= 6
-    }
-
-    static isInvalidCpf(cpf: string) {
-        return cpf.length !== 11
-    }
-
 }

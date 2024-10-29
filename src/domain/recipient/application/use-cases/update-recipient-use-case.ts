@@ -33,7 +33,14 @@ export class UpdateRecipientUseCase {
 
         if(!Recipient.isNameWithvalidNumberOfCharacter(recipient.name)) return left(new NameWithInvalidNumberOfCharactersError())
 
-        const recipientUpdated = await this.recipientRepository.update(data, id)
+        const recipientUpdated = await this.recipientRepository.update(
+            Recipient.create({
+                id, 
+                cpf: data.cpf   || recipient.cpf, 
+                name: data.name || recipient.name, 
+                phone_number: data.phone_number || recipient.phone_number
+            })
+        )
         
         return right({
             recipient : recipientUpdated

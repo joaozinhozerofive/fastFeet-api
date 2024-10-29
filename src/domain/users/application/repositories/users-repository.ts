@@ -8,7 +8,7 @@ export interface UsersRepository {
     findByCpf(cpf: String) : Promise<User | null>
     create(data : User) : Promise<User>
     findById(id: UniqueEntityUUID) : Promise<User | null>
-    update(data: Optional<UserProps, UserPropsOptional>, id: UniqueEntityUUID) : Promise<User>
+    update(data: User) : Promise<User>
     findManyNearBy(params: Optional<UserProps, UserPropsOptional>) : Promise<User[] | null>
-    deleteById(id: UniqueEntityUUID) : Promise<void>
+    delete(data: User) : Promise<void>
 }

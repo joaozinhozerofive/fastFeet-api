@@ -8,7 +8,7 @@ import { UserNotFoundError } from "../../../../core/errors/user-not-found-error.
 let inMemoryUsersRepository: InMemoryUsersRepository
 let sut: FindUniqueUserUseCase
 
-describe('Find an User by id', async() => {
+describe('Find an unique User', async() => {
     beforeEach(() => {
         inMemoryUsersRepository =  new InMemoryUsersRepository()
         sut = new FindUniqueUserUseCase(inMemoryUsersRepository)

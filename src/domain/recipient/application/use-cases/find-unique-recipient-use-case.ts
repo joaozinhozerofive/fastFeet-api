@@ -4,6 +4,10 @@ import { RecipientRepository } from "../repositories/recipient-repository.js";
 import { RecipientNotFoundError } from "@/core/errors/recipient-not-found-error.js";
 import { UniqueEntityUUID } from "@/core/types/random-uuid.js";
 
+interface FindUniqueRecipientUseCaseRequest {
+    id: UniqueEntityUUID
+}
+
 type FindUniqueRecipientUseCaseUseCaseResponse = Either<
     RecipientNotFoundError, 
     {
@@ -16,8 +20,8 @@ export class FindUniqueRecipientUseCase {
         private recipientRepository: RecipientRepository
     ) {}
 
-    async execute(id: UniqueEntityUUID) : Promise<FindUniqueRecipientUseCaseUseCaseResponse> {
-        const recipient = await this.recipientRepository.findById(id)
+    async execute(data: FindUniqueRecipientUseCaseRequest) : Promise<FindUniqueRecipientUseCaseUseCaseResponse> {
+        const recipient = await this.recipientRepository.findById(data.id)
 
         if(!recipient) return left(new RecipientNotFoundError())
 
