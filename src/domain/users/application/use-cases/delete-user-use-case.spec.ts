@@ -2,7 +2,7 @@ import { InMemoryUsersRepository } from "@test/repositories/in-memory-users-repo
 import { beforeEach, describe, expect, it } from "vitest";
 import { User } from "../../enterprise/entities/entity-user.js";
 import { randomUUID } from "crypto"
-import { UserNotFoundError } from "../../errors/user-not-found-error.js";
+import { UserNotFoundError } from "@/core/errors/user-not-found-error.js";
 import { DeleteUserUseCase } from "./delete-user-use-case.js";
 
 let inMemoryUsersRepository: InMemoryUsersRepository
@@ -10,7 +10,7 @@ let sut: DeleteUserUseCase
 
 describe('Find an User by id', async() => {
     beforeEach(() => {
-        inMemoryUsersRepository =  new InMemoryUsersRepository()
+        inMemoryUsersRepository = new InMemoryUsersRepository()
         sut = new DeleteUserUseCase(inMemoryUsersRepository)
     })
 

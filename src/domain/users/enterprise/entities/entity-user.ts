@@ -1,10 +1,10 @@
 import { Entity } from "@/core/entities/entity.js"
-import { EntityUUID } from "@/core/types/random-uuid.js"
+import { UniqueEntityUUID } from "@/core/types/random-uuid.js"
 import { hash } from "bcryptjs"
 import { randomUUID } from "crypto" 
 
 export interface UserProps{
-    id?      : EntityUUID
+    id?      : UniqueEntityUUID
     cpf      : string 
     password : string 
     name     : string 
@@ -36,30 +36,14 @@ export class User extends Entity<UserProps>{
         return this._props.role
     }
 
-    get props() {
-        return this._props
-    }
-
     static buildProps(props : UserProps) {
         props.cpf = User.buildCpf(props.cpf)
 
         return props
     }
 
-    static buildCpf(cpf: string) {
-        cpf = cpf.replaceAll(".", "")
-        cpf = cpf.replaceAll("-", "")
-
-        return cpf
-    }
-
     static isPasswordWithValidNumberOfCharacters(password: string) {
         return password.length >= 6
-    }
-
-    static isNameWithvalidNumberOfCharacter(name: string) {
-        const nameWithoutSpace = name.split(" ").join('')
-        return nameWithoutSpace.length >= 6
     }
 
     static async buildPasswordHashed(password: string) {

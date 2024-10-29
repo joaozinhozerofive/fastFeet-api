@@ -2,11 +2,11 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { User } from "../../enterprise/entities/entity-user.js";
 import { CreateUserUseCase } from "./create-user-use-case.js";
 import { InMemoryUsersRepository } from "@test/repositories/in-memory-users-repository.js";
-import { CpfAlreadyExistsError } from "../../errors/cpf-already-exists.js";
-import { InvalidCpfError } from "../../errors/invalid-cpf.js";
+import { CpfAlreadyExistsError } from "../../../../core/errors/cpf-already-exists.js";
+import { InvalidCpfError } from "../../../../core/errors/invalid-cpf.js";
 import { randomUUID } from "crypto"
-import { PasswordWithInvalidNumberOfCharactersError } from "../../errors/password-with-invalid-number-of-characters-error.js";
-import { NameWithInvalidNumberOfCharactersError } from "../../errors/name-with-invalid-number-of-characters-error.js";
+import { PasswordWithInvalidNumberOfCharactersError } from "../../../../core/errors/password-with-invalid-number-of-characters-error.js";
+import { NameWithInvalidNumberOfCharactersError } from "../../../../core/errors/name-with-invalid-number-of-characters-error.js";
 import { compare } from "bcryptjs";
 
 let inMemoryUsersRepository: InMemoryUsersRepository

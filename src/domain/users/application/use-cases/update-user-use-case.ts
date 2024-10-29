@@ -1,15 +1,16 @@
 import { Optional } from "@/core/types/optional.js";
 import { User, UserProps } from "../../enterprise/entities/entity-user.js";
 import { UsersRepository } from "../repositories/users-repository.js";
-import { EntityUUID } from "@/core/types/random-uuid.js";
-import { UserNotFoundError } from "../../errors/user-not-found-error.js";
+import { UniqueEntityUUID } from "@/core/types/random-uuid.js";
+import { UserNotFoundError } from "../../../../core/errors/user-not-found-error.js";
 import { Either, left, right } from "@/core/either.js";
 import { compare } from "bcryptjs";
-import { InvalidPasswordError } from "../../errors/invalid-password-error.js";
-import { CpfAlreadyExistsError } from "../../errors/cpf-already-exists.js";
-import { PasswordWithInvalidNumberOfCharactersError } from "../../errors/password-with-invalid-number-of-characters-error.js";
+import { InvalidPasswordError } from "../../../../core/errors/invalid-password-error.js";
+import { CpfAlreadyExistsError } from "../../../../core/errors/cpf-already-exists.js";
+import { PasswordWithInvalidNumberOfCharactersError } from "../../../../core/errors/password-with-invalid-number-of-characters-error.js";
 import { UserPropsOptional } from "@/core/types/user-props-optional.js";
-import { NameWithInvalidNumberOfCharactersError } from "../../errors/name-with-invalid-number-of-characters-error.js";
+import { NameWithInvalidNumberOfCharactersError } from "../../../../core/errors/name-with-invalid-number-of-characters-error.js";
+import { InvalidCpfError } from "@/core/errors/invalid-cpf.js";
 
 
 interface UpdateUserUseCaseDataRequest extends UserProps{
@@ -17,7 +18,9 @@ interface UpdateUserUseCaseDataRequest extends UserProps{
 }
 
 type UpdateUserUseCaseResponse = Either<
-    UserNotFoundError | InvalidPasswordError | CpfAlreadyExistsError | PasswordWithInvalidNumberOfCharactersError | NameWithInvalidNumberOfCharactersError, 
+    UserNotFoundError | InvalidPasswordError | CpfAlreadyExistsError | 
+    PasswordWithInvalidNumberOfCharactersError | NameWithInvalidNumberOfCharactersError |
+    InvalidCpfError, 
     {
         user: User
     }
@@ -28,7 +31,7 @@ export class UpdateUserUseCase {
         private usersRepository : UsersRepository
     ) {}
 
-    async execute(data : Optional<UpdateUserUseCaseDataRequest, UserPropsOptional>, id: EntityUUID) : Promise<UpdateUserUseCaseResponse> {
+    async execute(data : Optional<UpdateUserUseCaseDataRequest, UserPropsOptional>, id: UniqueEntityUUID) : Promise<UpdateUserUseCaseResponse> {
         const user = await this.usersRepository.findById(id)
 
         if(!user) return left(new UserNotFoundError())
@@ -47,6 +50,7 @@ export class UpdateUserUseCase {
 
         if(data.cpf) {
             if(await this.existsOtherUserWithCpf(data.cpf, user)) return left(new CpfAlreadyExistsError())
+            if(User.isInvalidCpf(data.cpf)) return left(new InvalidCpfError())
         }
 
         const userUpdated = await this.usersRepository.update(data, id)

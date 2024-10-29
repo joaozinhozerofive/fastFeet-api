@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { FindUniqueUserUseCase } from "./find-unique-user-use-case.js";
 import { User } from "../../enterprise/entities/entity-user.js";
 import { randomUUID } from "crypto"
-import { UserNotFoundError } from "../../errors/user-not-found-error.js";
+import { UserNotFoundError } from "../../../../core/errors/user-not-found-error.js";
 
 let inMemoryUsersRepository: InMemoryUsersRepository
 let sut: FindUniqueUserUseCase
@@ -14,7 +14,7 @@ describe('Find an User by id', async() => {
         sut = new FindUniqueUserUseCase(inMemoryUsersRepository)
     })
 
-    it('should be able find an user by id', async () => {
+    it('should be able to find an user by id', async () => {
         const uuid = randomUUID()
         const user = User.create({
             id       : uuid,

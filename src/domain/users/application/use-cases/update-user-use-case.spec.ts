@@ -1,14 +1,15 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { User } from "../../enterprise/entities/entity-user.js";
 import { InMemoryUsersRepository } from "@test/repositories/in-memory-users-repository.js";
-import { CpfAlreadyExistsError } from "../../errors/cpf-already-exists.js";
+import { CpfAlreadyExistsError } from "../../../../core/errors/cpf-already-exists.js";
 import { compare, hash } from 'bcryptjs';
 import { randomUUID } from "crypto"
-import { PasswordWithInvalidNumberOfCharactersError } from "../../errors/password-with-invalid-number-of-characters-error.js";
-import { NameWithInvalidNumberOfCharactersError } from "../../errors/name-with-invalid-number-of-characters-error.js";
+import { PasswordWithInvalidNumberOfCharactersError } from "../../../../core/errors/password-with-invalid-number-of-characters-error.js";
+import { NameWithInvalidNumberOfCharactersError } from "../../../../core/errors/name-with-invalid-number-of-characters-error.js";
 import { UpdateUserUseCase } from "./update-user-use-case.js";
-import { UserNotFoundError } from "../../errors/user-not-found-error.js";
-import { InvalidPasswordError } from "../../errors/invalid-password-error.js";
+import { UserNotFoundError } from "../../../../core/errors/user-not-found-error.js";
+import { InvalidPasswordError } from "../../../../core/errors/invalid-password-error.js";
+import { InvalidCpfError } from "@/core/errors/invalid-cpf.js";
 
 let inMemoryUsersRepository: InMemoryUsersRepository
 let sut: UpdateUserUseCase
@@ -160,7 +161,31 @@ describe('Update User',  () => {
         })
     })
 
-    it(`shouldn't be able to update an user`, async () => {
+    it(`shouldn't be able to update the cpf if it has less or more than 6 characters`, async () => {
+        const uuid = randomUUID()
+
+        inMemoryUsersRepository.users.push(
+            User.create({
+                id       : uuid,
+                cpf      : "159.235.225-96610", 
+                name     : "user test", 
+                password : await User.buildPasswordHashed("123456"), 
+                role     : "ADMIN"
+            })
+        )
+
+        const response = await sut.execute({
+            cpf: User.buildCpf("159.235.225-96610"), 
+        }, uuid)
+
+        expect(response.isLeft()).toBe(true)
+        expect(response.value).instanceOf(InvalidCpfError)
+        expect(response.value).toMatchObject({
+            statusCode: 400
+        })
+    })
+
+    it(`should be able to update an user`, async () => {
         const uuid = randomUUID()
         inMemoryUsersRepository.users.push(
             User.create({

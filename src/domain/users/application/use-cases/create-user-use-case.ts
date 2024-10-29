@@ -1,11 +1,10 @@
 import { Either, left, right } from "@/core/either.js";
 import { UsersRepository } from "@/domain/users/application/repositories/users-repository.js";
-import { hash } from 'bcryptjs';
 import { User, UserProps } from "../../enterprise/entities/entity-user.js";
-import { CpfAlreadyExistsError } from "../../errors/cpf-already-exists.js";
-import { InvalidCpfError } from "../../errors/invalid-cpf.js";
-import { PasswordWithInvalidNumberOfCharactersError } from "../../errors/password-with-invalid-number-of-characters-error.js";
-import { NameWithInvalidNumberOfCharactersError } from "../../errors/name-with-invalid-number-of-characters-error.js";
+import { CpfAlreadyExistsError } from "../../../../core/errors/cpf-already-exists.js";
+import { InvalidCpfError } from "../../../../core/errors/invalid-cpf.js";
+import { PasswordWithInvalidNumberOfCharactersError } from "../../../../core/errors/password-with-invalid-number-of-characters-error.js";
+import { NameWithInvalidNumberOfCharactersError } from "../../../../core/errors/name-with-invalid-number-of-characters-error.js";
 
 interface CreateUserRequest extends UserProps {}
 
@@ -34,7 +33,7 @@ export class CreateUserUseCase {
 
         const user = User.create(data)
 
-        if(user.cpf.length !== 11) return left(new InvalidCpfError())
+        if(User.isInvalidCpf(user.cpf)) return left(new InvalidCpfError())
 
         const userCreated = await this.usersRepository.create(user)
 

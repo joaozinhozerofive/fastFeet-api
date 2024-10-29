@@ -1,7 +1,7 @@
 import { Either, left, right } from "@/core/either.js";
 import { UsersRepository } from "@/domain/users/application/repositories/users-repository.js";
 import { User } from "../../enterprise/entities/entity-user.js";
-import { InvalidSessionCredentialsError } from "../../errors/invalid-credentials-session.js";
+import { InvalidSessionCredentialsError } from "../../../../core/errors/invalid-credentials-session.js";
 import { compare } from "bcryptjs";
 
 interface AuthenticateUserRequests {

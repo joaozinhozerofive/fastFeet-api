@@ -1,1 +1,1 @@
-export type EntityUUID = String;
+export type UniqueEntityUUID = String;

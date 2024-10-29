@@ -3,7 +3,7 @@ import { InMemoryUsersRepository } from "@test/repositories/in-memory-users-repo
 import { AuthenticateUserUseCase } from "./authenticate-user-use-case.js"
 import { User } from "../../enterprise/entities/entity-user.js"
 import { hash } from "bcryptjs";
-import { InvalidSessionCredentialsError } from "../../errors/invalid-credentials-session.js";
+import { InvalidSessionCredentialsError } from "../../../../core/errors/invalid-credentials-session.js";
 
 let inMemoryUsersRepository: InMemoryUsersRepository
 let sut: AuthenticateUserUseCase
