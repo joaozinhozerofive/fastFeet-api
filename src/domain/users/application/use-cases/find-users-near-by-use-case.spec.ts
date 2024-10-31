@@ -17,7 +17,7 @@ describe('Find Many Users By Params', async () =>{
         const user = User.create({
             id       : randomUUID() , 
             cpf      : "156.156.156-10", 
-            name     : "Usuário do teste", 
+            name     : "User of test", 
             password : await User.buildPasswordHashed("123456"), 
             role     :"ADMIN"
         })
@@ -46,7 +46,7 @@ describe('Find Many Users By Params', async () =>{
         const user = User.create({
             id       : randomUUID() , 
             cpf      : "156.156.156-10", 
-            name     : "Usuário do teste", 
+            name     : "User of test", 
             password : await User.buildPasswordHashed("123456"), 
             role     :"ADMIN"
         })

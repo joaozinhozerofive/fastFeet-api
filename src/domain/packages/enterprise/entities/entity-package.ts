@@ -6,7 +6,7 @@ import { User } from "@/domain/users/enterprise/entities/entity-user.js";
 
 export interface PackageProps {
     id?             : UniqueEntityUUID
-    status          : StatusPackage
+    status?         : StatusPackage
     recipient       : Recipient
     user            : User
     street_name     : string 
@@ -28,22 +28,35 @@ export enum StatusPackage {
 }
 
 export class Package extends Entity<PackageProps> {
+    private static STATUS_PACKAGE_DEFAULT: StatusPackage = 2 
     constructor(props: PackageProps) {
         super(Package.buildProps(props))
     }
 
+    set cep(cep: string) {
+        this._props.cep = cep
+    }
+
     set status(status: StatusPackage) {
-        this._props.status = status 
+        this._props.status = status
+    }
+
+    set recipient(recipient: Recipient) {
+        this._props.recipient = recipient 
+    }
+
+    set user(user: User) {
+        this._props.user = user 
     }
 
     get status() {
-        return this._props.status
+        return this._props.status || Package.STATUS_PACKAGE_DEFAULT
     }
 
     get statusData() {
         return {
             statusCode : this._props.status, 
-            statusName : Package.getStatusName(this._props.status)
+            statusName : Package.getStatusName(this._props.status || Package.STATUS_PACKAGE_DEFAULT)
         }
     }
 
@@ -99,8 +112,8 @@ export class Package extends Entity<PackageProps> {
     }
 
     static buildProps(props: PackageProps) {
-        props.cep = Package.buildCep(props.cep)
-
+        props.cep    = Package.buildCep(props.cep)
+        props.status = props.status || Package.STATUS_PACKAGE_DEFAULT
         return props
     }
 
@@ -128,6 +141,6 @@ export class Package extends Entity<PackageProps> {
     }
 
     static isCepWithvalidNumberOfCharacter(cep: string) {
-        return cep.length !== 8
+        return cep.length === 8
     }
 }

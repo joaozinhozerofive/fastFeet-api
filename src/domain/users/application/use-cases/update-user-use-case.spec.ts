@@ -151,7 +151,7 @@ describe('Update User',  () => {
         )
 
         const response = await sut.execute({
-            cpf: User.buildCpf("159.235.225-96"), 
+            cpf: "159.235.225-96", 
         }, uuid)
 
         expect(response.isLeft()).toBe(true)
@@ -175,7 +175,7 @@ describe('Update User',  () => {
         )
 
         const response = await sut.execute({
-            cpf: User.buildCpf("159.235.225-96610"), 
+            cpf: "159.235.225-96610", 
         }, uuid)
 
         expect(response.isLeft()).toBe(true)
@@ -198,8 +198,8 @@ describe('Update User',  () => {
         )
 
         const response = await sut.execute({
-            cpf         : User.buildCpf("159.159.159-10"), 
-            name        : "Usuário Teste", 
+            cpf         : "159.159.159-10", 
+            name        : "User Test", 
             password    : "1234567", 
             old_password: "123456", 
             role        : "DELIVERY-PEOPLE"
@@ -209,8 +209,8 @@ describe('Update User',  () => {
         expect(response.isRight()).toBe(true)
         expect(response.value).toMatchObject({
                 user : {
-                    cpf         : User.buildCpf("159.159.159-10"), 
-                    name        : "Usuário Teste", 
+                    cpf         : "15915915910", 
+                    name        : "User Test", 
                     role        : "DELIVERY-PEOPLE"
                 }
         })

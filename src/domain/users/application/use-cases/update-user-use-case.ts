@@ -32,6 +32,8 @@ export class UpdateUserUseCase {
     ) {}
 
     async execute(data: Optional<UpdateUserUseCaseDataRequest, UserPropsOptional>, id: UniqueEntityUUID) : Promise<UpdateUserUseCaseResponse> {
+        data = UpdateUserUseCase.buildData(data)
+
         const user = await this.usersRepository.findById(id)
 
         if(!user) return left(new UserNotFoundError())
@@ -65,6 +67,12 @@ export class UpdateUserUseCase {
         return right({
             user : userUpdated
         })
+    }
+
+    private static buildData(data: Optional<UpdateUserUseCaseDataRequest, UserPropsOptional>) {
+        data.cpf = data.cpf ? User.buildCpf(data.cpf) : undefined
+        
+        return data 
     }
 
     private async existsOtherUserWithCpf(cpf: string, user: User) {

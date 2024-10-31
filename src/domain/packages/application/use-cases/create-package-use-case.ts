@@ -14,7 +14,7 @@ import { StateIsRequiredError } from "@/core/errors/state-is-required-error.js";
 import { InvalidLengthCepError } from "@/core/errors/invalid-length-cep-error.js";
 
 interface CreatePackageUseCaseRequest {
-    status          : StatusPackage
+    status?         : StatusPackage
     recipientId     : UniqueEntityUUID
     userId          : UniqueEntityUUID
     street_name     : string 
@@ -45,27 +45,29 @@ export class CreatePackageUseCase {
 
         if(!recipient) return left(new RecipientNotFoundError())
 
-        const user = await this.usersRepository.findById(data.recipientId)
+        const user = await this.usersRepository.findById(data.userId)
         
         if(!user) return left(new UserNotFoundError())
 
-        if(![1, 2, 3, 4].includes(data.status)) return left(new InvalidStatusPackageError())
-
-        if(!Package.isStreetNameWithValidNumberOfCharacter(data.street_name)) return left(new InvalidLengthStreetNameError())
-            
-        if(!Package.isNeighborhoodWithValidNumberOfCharacter(data.neighborhood)) return left(new InvalidLengthNeighborhoodError())
-
-        if(!Package.isNeighborhoodWithValidNumberOfCharacter(data.city)) return left(new InvalidLengthCityError())
-
-        if(!data.state) return left(new StateIsRequiredError())
-
-        if(!Package.isCepWithvalidNumberOfCharacter(data.cep)) return left(new InvalidLengthCepError())
-
-        const packageCreated = await this.packageRepository.create(Package.create({
+        const newPackage = Package.create({
             ...data, 
             recipient, 
             user
-        })) 
+        })
+
+        if(newPackage.status && ![1, 2, 3, 4].includes(newPackage.status)) return left(new InvalidStatusPackageError())
+
+        if(!Package.isStreetNameWithValidNumberOfCharacter(newPackage.street_name)) return left(new InvalidLengthStreetNameError())
+            
+        if(!Package.isNeighborhoodWithValidNumberOfCharacter(newPackage.neighborhood)) return left(new InvalidLengthNeighborhoodError())
+
+        if(!Package.isCityWithValidNumberOfCharacter(newPackage.city)) return left(new InvalidLengthCityError())
+
+        if(!newPackage.state) return left(new StateIsRequiredError())
+
+        if(!Package.isCepWithvalidNumberOfCharacter(newPackage.cep)) return left(new InvalidLengthCepError())
+
+        const packageCreated = await this.packageRepository.create(newPackage) 
 
         return right({
             package: packageCreated

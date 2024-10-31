@@ -2,7 +2,6 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { InMemoryUsersRepository } from "@test/repositories/in-memory-users-repository.js"
 import { AuthenticateUserUseCase } from "./authenticate-user-use-case.js"
 import { User } from "../../enterprise/entities/entity-user.js"
-import { hash } from "bcryptjs";
 import { InvalidSessionCredentialsError } from "../../../../core/errors/invalid-credentials-session.js";
 
 let inMemoryUsersRepository: InMemoryUsersRepository

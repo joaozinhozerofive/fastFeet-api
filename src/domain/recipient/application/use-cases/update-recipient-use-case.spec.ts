@@ -49,7 +49,7 @@ describe(`Create a Recipient`, async () => {
         }))
 
         const response =  await sut.execute({
-            cpf: Recipient.buildCpf('159.189.189-62')
+            cpf: "15918918962"
         }, uuid)
 
         expect(response.isLeft()).toBe(true)
@@ -70,7 +70,7 @@ describe(`Create a Recipient`, async () => {
         inMemoryRecipientRepository.recipients.push(recipient)
 
         const response = await sut.execute({
-            cpf: Recipient.buildCpf("158.158.159-663")
+            cpf: "158158159663"
         }, uuid)
 
         expect(response.isLeft()).toBe(true)
@@ -113,7 +113,7 @@ describe(`Create a Recipient`, async () => {
         inMemoryRecipientRepository.recipients.push(recipient)
 
         const response = await sut.execute({
-            cpf          : Recipient.buildCpf("158.258.358-98"), 
+            cpf          : "158.258.358-98", 
             name         : "Recipient Updated Test", 
             phone_number : "47 98888-8888"
         }, uuid)

@@ -4,6 +4,7 @@ import { Package } from "@/domain/packages/enterprise/entities/entity-package.js
 
 export class InMemoryPackageRepository implements PackageRepository {
     public packages : Package[] = []
+    
     async create(data: Package): Promise<Package> {
         this.packages.push(data)
         return data
